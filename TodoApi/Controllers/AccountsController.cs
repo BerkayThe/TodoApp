@@ -48,7 +48,8 @@ namespace TodoApi.Controllers
                 //token oluşturma
                 var authClaims = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, dto.UserName)
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettigns.JwtSecret));
