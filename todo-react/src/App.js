@@ -1,45 +1,46 @@
-import { useState, useEffect } from 'react';
-import './App.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import Home from './Home';
+import Login from './Login';
+import Register from './Register';
 
-function App() {
-
-  const [todos, setTodos] = useState([{ name: "Loading..." }]);
-  const [newTodo, setNewTodo] = useState({ id:0, name: "", isCompleted:false });
-
-  const addNewTodo = (e) => {
-    e.preventDefault();
-    fetch("https://localhost:5001/api/todoitems",{
-      method: "post",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(newTodo)
-    }).then(response => response.json())
-    .then(json => setTodos([...todos,json]));
-    setNewTodo({id:0,name:"",isCompleted:false});
-  }
-
-
-  useEffect(() => {
-    fetch('https://localhost:5001/api/todoitems')
-      .then(response => response.json())
-      .then(json => setTodos(json));
-  }, []);
-
+export default function App() {
   return (
-    <div className="App">
-      <h1>My Todos</h1>
-      <form onSubmit={addNewTodo}>
-        <input type="text" value={newTodo.name}
-         onInput={e=>setNewTodo({...newTodo,name:e.target.value })}
-          placeholder="Write here." required/>
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/register">Register</Link>
+            </li>
+          </ul>
+        </nav>
 
-      </form>
-      <ul>
-        {todos.map((x, index) => <li key={index}>{x.name}</li>)}
-      </ul>
-    </div>
-  )
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+  );
 }
-
-export default App;
