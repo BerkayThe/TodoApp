@@ -1,34 +1,43 @@
-import React from "react";
+import React,{useContext} from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
 import Home from './Home';
 import Login from './Login';
 import Register from './Register';
+import './App.css'
+import AppContext from './AppContext'
+
+function Nav() {
+  return (
+  <nav>
+    <ul className="navMenu">
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/login">Login</Link>
+      </li>
+      <li>
+        <Link to="/register">Register</Link>
+      </li>
+    </ul>
+  </nav>
+  )
+}
 
 export default function App() {
-  return (
+  const ctx = useContext(AppContext)
+  if (ctx.loggedIn)
+  {
+    return (
     <Router>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+        <Nav />
         <Switch>
           <Route path="/login">
             <Login />
@@ -43,4 +52,26 @@ export default function App() {
       </div>
     </Router>
   );
+}
+else {
+  return (
+    <Router>
+      <div>
+        <Nav />
+        <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/">
+            <Redirect to="./login" />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+  );
+}
+  
 }
