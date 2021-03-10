@@ -5,9 +5,10 @@ import AppContext from './AppContext'
 
 function AppWithContext() {
     const [loggedIn, setLoggedIn] = useState(false);
+    const [token, setToken] = useState(null);
 
     return (
-        <AppContext.Provider value = {{ loggedIn, setLoggedIn}}>
+        <AppContext.Provider value = {{ loggedIn, setLoggedIn, token, setToken}}>
             <App />
         </AppContext.Provider>
     );

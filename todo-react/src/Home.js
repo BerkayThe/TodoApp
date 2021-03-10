@@ -1,16 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import AppContext from './AppContext';
 import './Home.css';
 
 function Home() {
-
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const ctx = useContext(AppContext)
   const [todos, setTodos] = useState([{ name: "Loading..." }]);
   const [newTodo, setNewTodo] = useState({ id:0, name: "", isCompleted:false });
 
   const addNewTodo = (e) => {
     e.preventDefault();
-    fetch("https://localhost:5001/api/todoitems",{
+    fetch(apiUrl + "todoitems",{
       method: "post",
       headers: {
+        "Authorization" : "Bearer " + ctx.token,
         "Content-Type": "application/json"
       },
       body: JSON.stringify(newTodo)
@@ -21,9 +24,13 @@ function Home() {
 
 
   useEffect(() => {
-    fetch('https://localhost:5001/api/todoitems')
+    fetch(apiUrl + 'todoitems',{
+      headers: {
+        "Authorization" : "Bearer " + ctx.token
+      }
+    })
       .then(response => response.json())
-      .then(json => setTodos(json));
+      .then(data => setTodos(data));
   }, []);
 
   return (
