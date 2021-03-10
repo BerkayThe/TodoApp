@@ -25,6 +25,7 @@ function Login() {
                     return;
                 }
                 if (data.token) {
+                    localStorage["token"] = data.token;
                     ctx.setToken(data.token);
                     ctx.setLoggedIn(true);
                     history.push("/");
